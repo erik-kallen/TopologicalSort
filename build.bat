@@ -1,0 +1,1 @@
+packages\NuGet.CommandLine.2.7.3\tools\NuGet.exe pack TopologicalSort\TopologicalSort.csproj -build -Properties Configuration=Release -OutputDirectory TopologicalSort\bin
