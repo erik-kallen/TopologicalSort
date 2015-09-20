@@ -70,7 +70,7 @@ namespace TopologicalSort {
 		/// <param name="edges">Edges in the graph. If there is an edge such that (From, To) == (a, b), then b will appear before a in the result.</param>
 		/// <param name="comparer">Comparer used to compare the vertices, or null for the default comparer.</param>
 		/// <exception cref="ArgumentNullException">If <paramref name="vertices"/> or <paramref name="edges"/> is null.</exception>
-		public static IList<IList<T>> FindAndTopologicallySortStronglyConnectedComponents<T>(IEnumerable<T> vertices, IEnumerable<Edge<T>> edges, IEqualityComparer<T> comparer = null) {
+		public static IList<IList<T>> FindAndTopologicallySortStronglyConnectedComponents<T>(IEnumerable<T> vertices, IEnumerable<IEdge<T>> edges, IEqualityComparer<T> comparer = null) {
 			if (vertices == null) throw new ArgumentNullException("vertices");
 			if (edges == null) throw new ArgumentNullException("edges");
 
@@ -87,7 +87,7 @@ namespace TopologicalSort {
 		/// <param name="edges">Edges in the graph. If there is an edge such that (From, To) == (a, b), then b will appear before a in the result.</param>
 		/// <param name="comparer">Comparer used to compare the vertices, or null for the default comparer.</param>
 		/// <exception cref="ArgumentNullException">If any of <paramref name="source"/>, <paramref name="getVertex"/> or <paramref name="edges"/> is null.</exception>
-		public static IList<IList<TSource>> FindAndTopologicallySortStronglyConnectedComponents<TSource, TVertex>(IEnumerable<TSource> source, Func<TSource, TVertex> getVertex, IEnumerable<Edge<TVertex>> edges, IEqualityComparer<TVertex> comparer = null) {
+		public static IList<IList<TSource>> FindAndTopologicallySortStronglyConnectedComponents<TSource, TVertex>(IEnumerable<TSource> source, Func<TSource, TVertex> getVertex, IEnumerable<IEdge<TVertex>> edges, IEqualityComparer<TVertex> comparer = null) {
 			if (source == null) throw new ArgumentNullException("source");
 			if (getVertex == null) throw new ArgumentNullException("source");
 			if (edges == null) throw new ArgumentNullException("edges");
@@ -104,7 +104,7 @@ namespace TopologicalSort {
 		/// <param name="comparer">Comparer used to compare the vertices, or null for the default comparer.</param>
 		/// <exception cref="ArgumentException">If there are any cycles in the graph.</exception>
 		/// <exception cref="ArgumentNullException">If <paramref name="vertices"/> or <paramref name="edges"/> is null.</exception>
-		public static IEnumerable<T> TopologicalSort<T>(IEnumerable<T> vertices, IEnumerable<Edge<T>> edges, IEqualityComparer<T> comparer = null) {
+		public static IEnumerable<T> TopologicalSort<T>(IEnumerable<T> vertices, IEnumerable<IEdge<T>> edges, IEqualityComparer<T> comparer = null) {
 			var result = FindAndTopologicallySortStronglyConnectedComponents(vertices, edges, comparer);
 			if (result.Any(x => x.Count > 1))
 				throw new ArgumentException("Cycles in graph", "edges");
@@ -120,7 +120,7 @@ namespace TopologicalSort {
 		/// <param name="comparer">Comparer used to compare the vertices, or null for the default comparer.</param>
 		/// <exception cref="ArgumentException">If there are any cycles in the graph.</exception>
 		/// <exception cref="ArgumentNullException">If any of <paramref name="source"/>, <paramref name="getVertex"/> or <paramref name="edges"/> is null.</exception>
-		public static IEnumerable<TSource> TopologicalSort<TSource, TVertex>(IEnumerable<TSource> source, Func<TSource, TVertex> getVertex, IEnumerable<Edge<TVertex>> edges, IEqualityComparer<TVertex> comparer = null) {
+		public static IEnumerable<TSource> TopologicalSort<TSource, TVertex>(IEnumerable<TSource> source, Func<TSource, TVertex> getVertex, IEnumerable<IEdge<TVertex>> edges, IEqualityComparer<TVertex> comparer = null) {
 			var backref = source.ToDictionary(getVertex, comparer ?? EqualityComparer<TVertex>.Default);
 			return TopologicalSort(backref.Keys, edges, comparer).Select(t => backref[t]);
 		}
